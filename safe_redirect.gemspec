@@ -9,11 +9,10 @@ Gem::Specification.new do |gem|
   gem.version       = SafeRedirect::VERSION
   gem.authors       = ["Edwin Tunggawan"]
   gem.email         = ["vcc.edwint@gmail.com"]
-  gem.description   = %q{Preventing open redirects in Rubywep apps}
+  gem.description   = %q{Preventing open redirects in Ruby web apps}
   gem.summary       = %q{Preventing open redirects in Ruby web apps}
   gem.homepage      = "https://github.com/sdsdkkk/safe_redirect"
 
   gem.files         = `git ls-files`.split($/)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib", "lib/safe_redirect"]
 end
