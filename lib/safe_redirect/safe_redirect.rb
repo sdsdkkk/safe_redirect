@@ -1,8 +1,7 @@
 module SafeRedirect
   def safe_domain?(path)
-    whitelists = SafeRedirect.configuration.domain_whitelists || []
     path =~ /^\// && !(path =~ /^\/\/+/)  ||
-    whitelists.any? do |w|
+    SafeRedirect.configuration.domain_whitelists.any? do |w|
       path =~ /^https?:\/\/#{w}($|\/.*)/
     end
   end
@@ -13,8 +12,9 @@ module SafeRedirect
       if safe_domain?(stripped_path)
         stripped_path
       else
-        stripped_path.gsub(/https?:\/\/[a-z0-9\-\.:]*/i, '')
-                     .gsub(/^(data:|javascript:|\.|\/\/|@)+/i, '')
+        stripped_path.gsub!(/https?:\/\/[a-z0-9\-\.:]*/i, '')
+        stripped_path.gsub!(/^(data:|javascript:|\.|\/\/|@)+/i, '')
+        stripped_path
       end
     else
       SafeRedirect.configuration.default_path
