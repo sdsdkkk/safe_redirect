@@ -13,5 +13,10 @@ module SafeRedirect
 
   class Configuration
     attr_accessor :default_path, :domain_whitelists
+
+    def initialize
+      self.default_path = '/'
+      self.domain_whitelists = []
+    end
   end
 end

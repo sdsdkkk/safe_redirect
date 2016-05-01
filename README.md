@@ -1,4 +1,4 @@
-# SafeRedirect
+# Safe Redirect
 
 A little gem to keep our Rails app safe from open redirection vulnerabilities.
 
@@ -16,8 +16,8 @@ Create a `config/initializer/safe_redirect.rb` file.
 
 ```rb
 SafeRedirect.configure do |config|
-  config.domain_whitelists = ['www.google.com']
-  config.default_path = 'https://www.yahoo.com'
+  config.default_path = 'https://www.yahoo.com' # default value: '/'
+  config.domain_whitelists = ['www.google.com'] # default value: []
 end
 ```
 

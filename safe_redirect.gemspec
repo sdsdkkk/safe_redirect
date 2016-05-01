@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.version       = SafeRedirect::VERSION
   gem.authors       = ["Edwin Tunggawan"]
   gem.email         = ["vcc.edwint@gmail.com"]
-  gem.description   = %q{Preventing open redirects in Ruby web apps}
-  gem.summary       = %q{Preventing open redirects in Ruby web apps}
+  gem.description   = %q{Preventing open redirects in Rails apps}
+  gem.summary       = %q{Preventing open redirects in Rails apps}
   gem.homepage      = "https://github.com/sdsdkkk/safe_redirect"
 
   gem.files         = `git ls-files`.split($/)
