@@ -21,7 +21,7 @@ module SafeRedirect
     end
   end
 
-  def redirect_to(path, options)
+  def redirect_to(path, options={})
     super safe_path(path), options
   end
 end
