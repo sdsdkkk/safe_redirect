@@ -23,5 +23,6 @@ module SafeRedirect
 
   def redirect_to(path, options={})
     super safe_path(path), options
+  rescue NoMethodError
   end
 end

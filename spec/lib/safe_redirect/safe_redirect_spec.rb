@@ -49,5 +49,13 @@ module SafeRedirect
     it "considers https://www.bukalapak.com@google.com an unsafe path" do
       expect(Controller.safe_path('https://www.bukalapak.com@google.com')).to eq('')
     end
+
+    it "can use redirect_to method with only the target path" do
+      Controller.redirect_to '/'
+    end
+
+    it "can use redirect_to method with both the target path and the options" do
+      Controller.redirect_to '/', notice: 'Back to home page'
+    end
   end
 end
