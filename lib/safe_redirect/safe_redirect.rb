@@ -12,7 +12,7 @@ module SafeRedirect
       if safe_domain?(stripped_path)
         stripped_path
       else
-        stripped_path.gsub!(/https?:\/\/[a-z0-9\-\.:]*/i, '')
+        stripped_path.gsub!(/https?:\/\/[a-z0-9\-\.:@]*/i, '')
         stripped_path.gsub!(/^(data:|javascript:|\.|\/\/|@)+/i, '')
         stripped_path
       end

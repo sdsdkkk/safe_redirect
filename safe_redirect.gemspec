@@ -12,7 +12,11 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Preventing open redirects in Rails apps}
   gem.summary       = %q{Preventing open redirects in Rails apps}
   gem.homepage      = "https://github.com/sdsdkkk/safe_redirect"
+  gem.licenses      = ['MIT']
+
+  gem.add_development_dependency 'rspec'
 
   gem.files         = `git ls-files`.split($/)
+  gem.test_files    = gem.files.grep(%r{^spec/})
   gem.require_paths = ["lib", "lib/safe_redirect"]
 end
