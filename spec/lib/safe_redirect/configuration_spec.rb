@@ -6,7 +6,7 @@ module SafeRedirect
       reset_config
     end
 
-    it "default default_path is '/'" do
+    it "default default_path is /" do
       expect(SafeRedirect.configuration.default_path).to eq('/')
     end
 

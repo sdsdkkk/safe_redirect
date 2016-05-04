@@ -46,6 +46,10 @@ module SafeRedirect
       expect(Controller.safe_path('http://www.twitter.com')).to eq('http://www.twitter.com')
     end
 
+    it "considers :back a safe path" do
+      expect(Controller.safe_path(:back)).to eq(:back)
+    end
+
     it "considers https://www.bukalapak.com@google.com an unsafe path" do
       expect(Controller.safe_path('https://www.bukalapak.com@google.com')).to eq('')
     end
