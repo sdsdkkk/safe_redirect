@@ -39,7 +39,7 @@ module SafeRedirect
     end
 
     it "considers // an unsafe path" do
-      expect(Controller.safe_path('//')).to eq('')
+      expect(Controller.safe_path('//')).to eq('/')
     end
 
     it "considers http://www.twitter.com a safe path" do
@@ -51,7 +51,12 @@ module SafeRedirect
     end
 
     it "considers https://www.bukalapak.com@google.com an unsafe path" do
-      expect(Controller.safe_path('https://www.bukalapak.com@google.com')).to eq('')
+      expect(Controller.safe_path('https://www.bukalapak.com@google.com')).to eq('/')
+    end
+
+    it "considers .@@@google.com an unsafe path" do
+      expect(Controller.safe_path('.@@@google.com')).to eq('/')
+      expect(Controller.safe_path('.@@@google.com/search')).to eq('/search')
     end
 
     it "can use redirect_to method with only the target path" do
