@@ -10,7 +10,7 @@ module SafeRedirect
     case
     when path.kind_of?(String)
       clean_path(path)
-    when path.kind_of?(Symbol)
+    when path.kind_of?(Symbol) || path.kind_of?(Hash)
       path
     else
       SafeRedirect.configuration.default_path

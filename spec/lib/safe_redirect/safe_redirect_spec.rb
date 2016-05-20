@@ -50,6 +50,10 @@ module SafeRedirect
       expect(Controller.safe_path(:back)).to eq(:back)
     end
 
+    it "considers {controller: 'home', action: 'index'} a safe path" do
+      expect(Controller.safe_path({controller: 'home', action: 'index'})).to eq({controller: 'home', action: 'index'})
+    end
+
     it "considers https://www.bukalapak.com@google.com an unsafe path" do
       expect(Controller.safe_path('https://www.bukalapak.com@google.com')).to eq('/')
     end
