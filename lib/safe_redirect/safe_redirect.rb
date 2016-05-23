@@ -29,7 +29,7 @@ module SafeRedirect
     stripped_path = path.strip
     unless safe_domain?(stripped_path)
       stripped_path.gsub!(/https?:\/\/[a-z0-9\-\.:@]*/i, '')
-      stripped_path.gsub!(/^(data:|javascript:|\.|\/\/|@)+[a-z0-9\-\.:@]*/i, '')
+      stripped_path.gsub!(/^((https?:|data:|javascript:|\.|\/\/|@)+[a-z0-9\-\.:@]*)+/i, '')
     end
     stripped_path.empty? ? '/' : stripped_path
   end
