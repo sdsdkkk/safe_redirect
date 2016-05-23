@@ -19,7 +19,7 @@ module SafeRedirect
 
   def redirect_to(path, options={})
     target = options[:safe] ? path : safe_path(path)
-    super safe_path(target), options
+    super target, options
   rescue NoMethodError
   end
 
