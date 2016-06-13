@@ -39,7 +39,7 @@ redirect_to 1234 # => redirects to https://www.yahoo.com as default path
 ## Contributing
 
 - Fork the repository
-- Create a branch for a new feature, build it
+- Create a branch for a new feature or bug fix, build it
 - Create a pull request
 
 ## License
