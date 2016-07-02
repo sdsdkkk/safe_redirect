@@ -15,7 +15,7 @@ module SafeRedirect
       '/',
       'http://www.twitter.com',
       :back,
-      {controller: 'home', action: 'index'}
+      { controller: 'home', action: 'index' }
     ]
 
     UNSAFE_PATHS = %w(// https://www.bukalapak.com@google.com http://////@@@@@@attacker.com//evil.com
@@ -35,11 +35,11 @@ module SafeRedirect
       end
     end
 
-    it "can use redirect_to method with only the target path" do
+    it 'can use redirect_to method with only the target path' do
       Controller.redirect_to '/'
     end
 
-    it "can use redirect_to method with both the target path and the options" do
+    it 'can use redirect_to method with both the target path and the options' do
       Controller.redirect_to '/', notice: 'Back to home page'
     end
   end
