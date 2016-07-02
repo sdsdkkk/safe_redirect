@@ -27,7 +27,7 @@ Add this line to the controllers you wish to secure from open redirection.
 include SafeRedirect
 ```
 
-The `redirect_to` method provided by Rails will be overrode by `safe_redirect`'s `redirect_to` method.
+The `redirect_to` method provided by Rails will be overridden by `safe_redirect`'s `redirect_to` method.
 
 ```rb
 redirect_to 'https://www.google.com' # => redirects to https://www.google.com
