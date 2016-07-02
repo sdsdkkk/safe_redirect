@@ -2,7 +2,7 @@ module SafeRedirect
   def safe_domain?(path)
     path =~ /^\// && !(path =~ /^\/\/+/)  ||
     SafeRedirect.configuration.domain_whitelists.any? do |w|
-      path =~ /^https?:\/\/#{w}($|\/.*)/i
+      path =~ /^https?:\/\/#{Regexp.escape(w)}($|\/.*)/i
     end
   end
 

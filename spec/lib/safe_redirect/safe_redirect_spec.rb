@@ -80,6 +80,10 @@ module SafeRedirect
       expect(Controller.safe_path('%@%@%@%@%@%@%@%@%@%@evil.com')).to eq('/')
     end
 
+    it "considers https://www-bukalapak.com an unsafe path" do
+      expect(Controller.safe_path('https://www-bukalapak.com')).to eq('/')
+    end
+
     it "can use redirect_to method with only the target path" do
       Controller.redirect_to '/'
     end
