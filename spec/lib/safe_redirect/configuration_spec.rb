@@ -6,6 +6,16 @@ module SafeRedirect
       reset_config
     end
 
+    it 'errors if you try to end whitelisted domain with glob' do
+      config_update = -> do
+        SafeRedirect.configure do |config|
+          config.domain_whitelists = ["foo.*"]
+        end
+      end
+
+      expect(config_update).to raise_error(ArgumentError)
+    end
+
     it 'default default_path is /' do
       expect(SafeRedirect.configuration.default_path).to eq('/')
     end

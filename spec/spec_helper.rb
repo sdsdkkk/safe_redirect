@@ -10,7 +10,7 @@ end
 def load_config
   SafeRedirect.configure do |config|
     config.default_path = '/sdsdkkk'
-    config.domain_whitelists = ['www.twitter.com', 'www.bukalapak.com']
+    config.domain_whitelists = %w{www.twitter.com www.bukalapak.com *.foo.org}
   end
 end
 
