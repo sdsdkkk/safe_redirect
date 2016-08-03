@@ -1,16 +1,16 @@
+require 'uri'
+
 module SafeRedirect
-  def safe_domain?(path)
-    path =~ /^\// && !(path =~ /^\/\/+/)  ||
-    SafeRedirect.configuration.domain_whitelists.any? do |w|
-      path =~ /^https?:\/\/#{Regexp.escape(w)}($|\/.*)/i
-    end
+  def safe_domain?(uri)
+    return true if uri.host.nil? && uri.scheme.nil?
+    SafeRedirect.configuration.domain_whitelists.include?(uri.host)
   end
 
   def safe_path(path)
-    case
-    when path.kind_of?(String)
+    case path
+    when String
       clean_path(path)
-    when path.kind_of?(Symbol) || path.kind_of?(Hash)
+    when Symbol, Hash
       path
     else
       SafeRedirect.configuration.default_path
@@ -26,11 +26,9 @@ module SafeRedirect
   private
 
   def clean_path(path)
-    stripped_path = path.strip
-    unless safe_domain?(stripped_path)
-      stripped_path.gsub!(/https?:\/\/[a-z0-9\-\.:@]*/i, '')
-      stripped_path.gsub!(/^((https?:|data:|javascript:|\.|\/\/|@|%)+[a-z0-9\-\.:@%]*)+/i, '')
-    end
-    stripped_path.empty? ? '/' : stripped_path
+    uri = URI.parse(path)
+    safe_domain?(uri) ? path : '/'
+  rescue URI::InvalidURIError
+    '/'
   end
 end

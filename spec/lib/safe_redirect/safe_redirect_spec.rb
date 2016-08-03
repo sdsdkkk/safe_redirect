@@ -13,15 +13,20 @@ module SafeRedirect
     SAFE_PATHS = [
       'https://www.bukalapak.com',
       '/',
+      '/foobar',
       'http://www.twitter.com',
       :back,
       { controller: 'home', action: 'index' }
     ]
 
-    UNSAFE_PATHS = %w(// https://www.bukalapak.com@google.com http://////@@@@@@attacker.com//evil.com
-                      .@@@google.com //bukalapak.com%25%40%25%40%25%40%25%40%25%40%25%40%25%40evil.com
-                      %25%40%25%40%25%40%25%40%25%40%25%40%25%40%25%40%25%40%25%40evil.com 
-                      %@%@%@%@%@%@%@%@%@%@evil.com https://www-bukalapak.com)
+    UNSAFE_PATHS = [
+      "https://www.bukalapak.com@google.com",
+      "http://////@@@@@@attacker.com//evil.com",
+      "//bukalapak.com%25%40%25%40%25%40%25%40%25%40%25%40%25%40evil.com",
+      "%@%@%@%@%@%@%@%@%@%@evil.com",
+      "https://www-bukalapak.com",
+      "https://www.bukalapak.com\n.evil.com",
+    ]
 
     SAFE_PATHS.each do |path|
       it "considers #{path} a safe path" do
