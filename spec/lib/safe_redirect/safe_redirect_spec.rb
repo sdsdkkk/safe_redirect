@@ -15,8 +15,10 @@ module SafeRedirect
       '/',
       '/foobar',
       'http://www.twitter.com',
+      'http://blah.foo.org',
+      'http://foo.org',
       :back,
-      { controller: 'home', action: 'index' }
+      { controller: 'home', action: 'index' },
     ]
 
     UNSAFE_PATHS = [
@@ -26,6 +28,7 @@ module SafeRedirect
       "%@%@%@%@%@%@%@%@%@%@evil.com",
       "https://www-bukalapak.com",
       "https://www.bukalapak.com\n.evil.com",
+      "http://blah.blah.foo.org",
     ]
 
     SAFE_PATHS.each do |path|
