@@ -43,6 +43,12 @@ module SafeRedirect
       end
     end
 
+    it 'filters host, port, and protocol options when hash is passed to safe_path' do
+      hash = { host: 'yahoo.com', port: 80, protocol: 'https', controller: 'home', action: 'index' }
+      safe_hash = { port: 80, protocol: 'https', controller: 'home', action: 'index' }
+      expect(Controller.safe_path(hash)).to eq(safe_hash)
+    end
+
     it 'can use redirect_to method with only the target path' do
       Controller.redirect_to '/'
     end
