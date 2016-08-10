@@ -30,12 +30,10 @@ module SafeRedirect
     case path
     when String
       clean_path(path)
-    when Symbol
-      path
     when Hash
       sanitize_hash(path)
     else
-      SafeRedirect.configuration.default_path
+      path
     end
   end
 
@@ -49,9 +47,9 @@ module SafeRedirect
 
   def clean_path(path)
     uri = URI.parse(path)
-    safe_domain?(uri) ? path : '/'
+    safe_domain?(uri) ? path : SafeRedirect.configuration.default_path
   rescue URI::InvalidURIError
-    '/'
+    SafeRedirect.configuration.default_path
   end
 
   def sanitize_hash(hash)

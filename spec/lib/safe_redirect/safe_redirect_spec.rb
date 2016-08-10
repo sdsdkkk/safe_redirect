@@ -18,6 +18,7 @@ module SafeRedirect
       'http://blah.foo.org',
       'http://foo.org',
       :back,
+      ['some', 'object'],
       { controller: 'home', action: 'index' },
     ]
 
@@ -39,7 +40,7 @@ module SafeRedirect
 
     UNSAFE_PATHS.each do |path|
       it "considers #{path} an unsafe path" do
-        expect(Controller.safe_path(path)).to eq('/')
+        expect(Controller.safe_path(path)).to eq(SafeRedirect.configuration.default_path)
       end
     end
 
