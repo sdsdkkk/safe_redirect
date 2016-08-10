@@ -21,6 +21,14 @@ SafeRedirect.configure do |config|
 end
 ```
 
+We can also use wildcard subdomain on domain whitelists (thanks to [Mike Campbell](https://github.com/mikecmpbll)).
+
+```rb
+SafeRedirect.configure do |config|
+  config.domain_whitelists = ['*.foo.org'] # whitelisting foo.org, m.foo.org, www.foo.org, ...
+end
+```
+
 Add this line to the controllers you wish to secure from open redirection.
 
 ```rb
