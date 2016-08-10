@@ -30,12 +30,10 @@ module SafeRedirect
     case path
     when String
       clean_path(path)
-    when Symbol
-      path
     when Hash
       sanitize_hash(path)
     else
-      SafeRedirect.configuration.default_path
+      path
     end
   end
 

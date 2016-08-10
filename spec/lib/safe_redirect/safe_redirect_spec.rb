@@ -18,6 +18,7 @@ module SafeRedirect
       'http://blah.foo.org',
       'http://foo.org',
       :back,
+      ['some', 'object'],
       { controller: 'home', action: 'index' },
     ]
 
