@@ -2,7 +2,7 @@ require 'uri'
 
 module SafeRedirect
   def safe_domain?(uri)
-    return true if uri.host.nil? && uri.scheme.nil?
+    return true if valid_uri?(uri)
     return false if uri.host.nil?
 
     SafeRedirect.configuration.domain_whitelists.any? do |domain|
@@ -59,4 +59,11 @@ module SafeRedirect
     hash.delete(:host) unless safe_domain?(uri)
     hash
   end
+
+  def valid_uri?(uri)
+    return false unless uri.host.nil? && uri.scheme.nil?
+    return true if uri.path.nil? || uri.path =~ /^\//
+    false
+  end
+
 end
