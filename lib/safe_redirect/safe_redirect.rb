@@ -47,7 +47,7 @@ module SafeRedirect
 
   def clean_path(path)
     uri = URI.parse(path)
-    safe_domain?(uri) ? path : SafeRedirect.configuration.default_path
+    valid_path?(path) && safe_domain?(uri) ? path : SafeRedirect.configuration.default_path
   rescue URI::InvalidURIError
     SafeRedirect.configuration.default_path
   end
@@ -64,6 +64,10 @@ module SafeRedirect
     return false unless uri.host.nil? && uri.scheme.nil?
     return true if uri.path.nil? || uri.path =~ /^\//
     false
+  end
+
+  def valid_path?(path)
+    path !~ /\/\/\//
   end
 
 end

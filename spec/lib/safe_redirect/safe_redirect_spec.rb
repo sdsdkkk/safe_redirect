@@ -33,6 +33,7 @@ module SafeRedirect
       "https://www-bukalapak.com",
       "https://www.bukalapak.com\n.evil.com",
       "http://blah.blah.foo.org",
+      "///bit.ly/1hqE77G",
     ]
 
     SAFE_PATHS.each do |path|
