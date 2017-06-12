@@ -61,6 +61,7 @@ module SafeRedirect
   end
 
   def valid_uri?(uri)
+    return true if uri.host && whitelist_local? && local_address?(uri.host)
     return false unless uri.host.nil? && uri.scheme.nil?
     return true if uri.path.nil? || uri.path =~ /^\//
     false
@@ -68,6 +69,15 @@ module SafeRedirect
 
   def valid_path?(path)
     path !~ /\/\/\//
+  end
+
+  def whitelist_local?
+    SafeRedirect.configuration.whitelist_local
+  end
+
+  # borrowed the regex from https://github.com/rack/rack/blob/ea9e7a570b7ffd8ac6845a9ebecdd7de0af6b0ca/lib/rack/request.rb#L420
+  def local_address?(host)
+    host =~ /\A127\.0\.0\.1\Z|\A(10|172\.(1[6-9]|2[0-9]|30|31)|192\.168)\.|\A::1\Z|\Afd[0-9a-f]{2}:.+|\Alocalhost\Z|\Aunix\Z|\Aunix:/i
   end
 
 end

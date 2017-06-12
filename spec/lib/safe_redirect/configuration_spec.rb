@@ -20,6 +20,10 @@ module SafeRedirect
       expect(SafeRedirect.configuration.default_path).to eq('/')
     end
 
+    it 'default whitelist_local is false' do
+      expect(SafeRedirect.configuration.whitelist_local).to eq(false)
+    end
+
     it 'default domain_whitelists is []' do
       expect(SafeRedirect.configuration.domain_whitelists).to eq([])
     end
@@ -29,6 +33,13 @@ module SafeRedirect
         config.default_path = 'https://www.bukalapak.com'
       end
       expect(SafeRedirect.configuration.default_path).to eq('https://www.bukalapak.com')
+    end
+
+    it 'can update whitelist_local' do
+      SafeRedirect.configure do |config|
+        config.whitelist_local = true
+      end
+      expect(SafeRedirect.configuration.whitelist_local).to eq(true)
     end
 
     it 'can update domain_whitelists' do

@@ -7,10 +7,11 @@ def reset_config
   SafeRedirect.reset_config
 end
 
-def load_config
+def load_config(whitelist_local = false)
   SafeRedirect.configure do |config|
     config.default_path = '/sdsdkkk'
     config.domain_whitelists = %w{www.twitter.com www.bukalapak.com *.foo.org}
+    config.whitelist_local = whitelist_local
   end
 end
 
