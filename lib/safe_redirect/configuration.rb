@@ -12,11 +12,12 @@ module SafeRedirect
   end
 
   class Configuration
-    attr_accessor :default_path
+    attr_accessor :default_path, :whitelist_local
     attr_reader :domain_whitelists
 
     def initialize
       self.default_path = '/'
+      self.whitelist_local = false
       self.domain_whitelists = []
     end
 
