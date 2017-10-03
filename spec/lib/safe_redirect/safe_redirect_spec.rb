@@ -1,8 +1,16 @@
 require 'spec_helper'
+require 'stringio'
+require 'logger'
 
 module SafeRedirect
   describe SafeRedirect do
-    class Controller
+    class BaseController
+      def redirect_to(*)
+        # test stub
+      end
+    end
+
+    class Controller < BaseController
       extend SafeRedirect
     end
 
@@ -58,10 +66,19 @@ module SafeRedirect
       it 'can use redirect_to method with both the target path and the options' do
         Controller.redirect_to '/', notice: 'Back to home page'
       end
+
+      it 'can log violations' do
+        log_io = StringIO.new
+        SafeRedirect.configure{ |config| config.log = Logger.new(log_io) }
+
+        Controller.redirect_to(UNSAFE_PATHS.first)
+
+        expect(log_io.size).not_to eq(0)
+      end
     end
 
     context 'whitelist_local is not set' do
-  
+
       before(:all) do
         load_config
       end
@@ -75,7 +92,7 @@ module SafeRedirect
     end
 
     context 'whitelist_local is set' do
-  
+
       before(:all) do
         load_config true
       end

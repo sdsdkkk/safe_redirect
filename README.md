@@ -18,6 +18,7 @@ Create a `config/initializer/safe_redirect.rb` file.
 SafeRedirect.configure do |config|
   config.default_path = 'https://www.yahoo.com' # default value: '/'
   config.domain_whitelists = ['www.google.com'] # default value: []
+  config.log = Rails.env.development?           # default value: false
 end
 ```
 

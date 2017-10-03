@@ -39,6 +39,9 @@ module SafeRedirect
 
   def redirect_to(path, options={})
     target = options[:safe] ? path : safe_path(path)
+
+    log("Unsafe redirect path modified to #{target} from #{path}", :warn) if target != path
+
     super target, options
   rescue NoMethodError
   end
@@ -78,6 +81,18 @@ module SafeRedirect
   # borrowed the regex from https://github.com/rack/rack/blob/ea9e7a570b7ffd8ac6845a9ebecdd7de0af6b0ca/lib/rack/request.rb#L420
   def local_address?(host)
     host =~ /\A127\.0\.0\.1\Z|\A(10|172\.(1[6-9]|2[0-9]|30|31)|192\.168)\.|\A::1\Z|\Afd[0-9a-f]{2}:.+|\Alocalhost\Z|\Aunix\Z|\Aunix:/i
+  end
+
+  def log(msg, level = :warn)
+    return unless (logger = SafeRedirect.configuration.log)
+
+    msg = "SafeRedirect: #{msg}"
+
+    if logger.respond_to?(level)
+      logger.send(level, msg)
+    elsif defined?(Rails)
+      Rails.logger.send(level, msg)
+    end
   end
 
 end
