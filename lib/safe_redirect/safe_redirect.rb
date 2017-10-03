@@ -7,7 +7,7 @@ module SafeRedirect
 
     SafeRedirect.configuration.domain_whitelists.any? do |domain|
       if domain.include?("*")
-        rf = domain.split(/(\*)/).map{ |f| f == "*" ? "\\w*" : Regexp.escape(f) }
+        rf = domain.split(/(\*)/).map{ |f| f == "*" ? "[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]?" : Regexp.escape(f) }
         regexp = Regexp.new("\\A#{rf.join}\\z")
 
         safe = uri.host.match(regexp)
