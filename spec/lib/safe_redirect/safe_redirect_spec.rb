@@ -12,6 +12,7 @@ module SafeRedirect
       '/foobar',
       'http://www.twitter.com',
       'http://blah.foo.org',
+      'http://bl-ah.foo.org',
       'http://foo.org',
       'http://foo.org/',
       :back,
