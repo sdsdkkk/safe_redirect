@@ -28,6 +28,10 @@ module SafeRedirect
       expect(SafeRedirect.configuration.domain_whitelists).to eq([])
     end
 
+    it 'default log is false' do
+      expect(SafeRedirect.configuration.log).to eq(false)
+    end
+
     it 'can update default_path' do
       SafeRedirect.configure do |config|
         config.default_path = 'https://www.bukalapak.com'
@@ -47,6 +51,13 @@ module SafeRedirect
         config.domain_whitelists = ['www.bukalapak.com']
       end
       expect(SafeRedirect.configuration.domain_whitelists).to eq(['www.bukalapak.com'])
+    end
+
+    it 'can update log' do
+      SafeRedirect.configure do |config|
+        config.log = true
+      end
+      expect(SafeRedirect.configuration.log).to eq(true)
     end
   end
 end
