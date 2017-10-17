@@ -86,7 +86,7 @@ module SafeRedirect
   def log(msg, level = :warn)
     return unless (logger = SafeRedirect.configuration.log)
 
-    msg = "SafeRedirect: #{msg}"
+    msg = "[#{Time.now}] SafeRedirect: #{msg}"
 
     if logger.respond_to?(level)
       logger.send(level, msg)
