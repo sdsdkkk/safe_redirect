@@ -10,7 +10,7 @@ Add this line to Gemfile.
 gem 'safe_redirect'
 ```
 
-##  Usage
+##  Configuration
 
 Create a `config/initializer/safe_redirect.rb` file.
 
@@ -22,13 +22,17 @@ SafeRedirect.configure do |config|
 end
 ```
 
-We can also use wildcard subdomain on domain whitelists (thanks to [Mike Campbell](https://github.com/mikecmpbll)).
+You can also use wildcard subdomain on domain whitelists (thanks to [Mike Campbell](https://github.com/mikecmpbll)).
 
 ```rb
 SafeRedirect.configure do |config|
   config.domain_whitelists = ['*.foo.org'] # whitelisting foo.org, m.foo.org, www.foo.org, ...
 end
 ```
+
+To log with `Rails.logger`, set `config.log = true`. To use a custom logger, set `config.log` to an object that responds to `#warn`.
+
+##  Usage
 
 Add this line to the controllers you wish to secure from open redirection.
 
