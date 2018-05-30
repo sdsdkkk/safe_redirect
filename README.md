@@ -12,7 +12,7 @@ gem 'safe_redirect'
 
 ##  Configuration
 
-Create a `config/initializer/safe_redirect.rb` file.
+Create a `config/initializers/safe_redirect.rb` file.
 
 ```rb
 SafeRedirect.configure do |config|
