@@ -41,38 +41,38 @@ module SafeRedirect
       "///bit.ly/1hqE77G",
     ]
 
-    shared_examples_for 'nonlocal hosts' do
+    shared_examples_for 'nonlocal hosts' do |klass|
       SAFE_PATHS.each do |path|
         it "considers #{path} a safe path" do
-          expect(Controller.safe_path(path)).to eq(path)
+          expect(klass.safe_path(path)).to eq(path)
         end
       end
 
       UNSAFE_PATHS.each do |path|
         it "considers #{path} an unsafe path" do
-          expect(Controller.safe_path(path)).to eq(SafeRedirect.configuration.default_path)
+          expect(klass.safe_path(path)).to eq(SafeRedirect.configuration.default_path)
         end
       end
 
       it 'filters host, port, and protocol options when hash is passed to safe_path' do
         hash = { host: 'yahoo.com', port: 80, protocol: 'https', controller: 'home', action: 'index' }
         safe_hash = { port: 80, protocol: 'https', controller: 'home', action: 'index' }
-        expect(Controller.safe_path(hash)).to eq(safe_hash)
+        expect(klass.safe_path(hash)).to eq(safe_hash)
       end
 
       it 'can use redirect_to method with only the target path' do
-        Controller.redirect_to '/'
+        klass.redirect_to '/'
       end
 
       it 'can use redirect_to method with both the target path and the options' do
-        Controller.redirect_to '/', notice: 'Back to home page'
+        klass.redirect_to '/', notice: 'Back to home page'
       end
 
       it 'can log violations' do
         log_io = StringIO.new
         SafeRedirect.configure{ |config| config.log = Logger.new(log_io) }
 
-        Controller.redirect_to(UNSAFE_PATHS.first)
+        klass.redirect_to(UNSAFE_PATHS.first)
 
         expect(log_io.size).not_to eq(0)
       end
@@ -84,7 +84,7 @@ module SafeRedirect
         load_config
       end
 
-      it_should_behave_like 'nonlocal hosts'
+      it_should_behave_like 'nonlocal hosts', Controller
 
       it 'considers local addresses as unsafe' do
         path = 'http://127.0.0.1'
@@ -93,17 +93,24 @@ module SafeRedirect
     end
 
     context 'whitelist_local is set' do
-
       before(:all) do
         load_config true
       end
 
-      it_should_behave_like 'nonlocal hosts'
+      it_should_behave_like 'nonlocal hosts', Controller
 
       it 'considers local addresses as safe' do
         path = 'http://127.0.0.1'
         expect(Controller.safe_path(path)).to eq(path)
       end
+    end
+
+    context 'calling module methods directly and whitelist_local is not set' do
+      before :all do
+        load_config
+      end
+
+      it_should_behave_like 'nonlocal hosts', SafeRedirect
     end
   end
 end

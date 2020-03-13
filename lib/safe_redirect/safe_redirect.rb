@@ -1,6 +1,8 @@
 require 'uri'
 
 module SafeRedirect
+  extend self
+
   def safe_domain?(uri)
     return true if valid_uri?(uri)
     return false if uri.host.nil?
