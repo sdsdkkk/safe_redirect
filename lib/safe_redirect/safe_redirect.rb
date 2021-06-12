@@ -1,5 +1,4 @@
 require 'uri'
-require 'pry'
 
 module SafeRedirect
   def safe_domain?(uri)
