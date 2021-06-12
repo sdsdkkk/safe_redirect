@@ -17,6 +17,7 @@ module SafeRedirect
 
     SAFE_PATHS = [
       'https://www.bukalapak.com',
+      'https://www.bukalapak.com/path',
       '/',
       '/foobar',
       'http://www.twitter.com',
@@ -40,6 +41,10 @@ module SafeRedirect
       "https://www.bukalapak.com\n.evil.com",
       "http://blah.blah.foo.org",
       "///bit.ly/1hqE77G",
+      "https://test.com/evil-endpoint/password=hahaha",
+      "https://good-website.test.com/evil-endpoint",
+      "https://www.bad.bukalapak.com",
+      "http://www.bukalapak.com",
     ]
 
     shared_examples_for 'nonlocal hosts' do
@@ -106,62 +111,5 @@ module SafeRedirect
         expect(Controller.safe_path(path)).to eq(path)
       end
     end
-
-    describe "#safe_domain?" do
-      let(:allowlist) do
-        [
-          'https://www.bukalapak.com',
-          'https://www.bar.foo.com/path',
-          'https://documents.foo.com/access/jwt',
-          'https://*.foo.com',
-          'https://*.test.com/good-end-point'
-        ]
-      end
-
-      before do
-        allow(SafeRedirect.configuration).to receive(:domain_whitelists).and_return(allowlist)
-      end
-      
-      it "allows domains in the allowlist", :aggregate_failures do
-        expect(Controller.safe_domain?(URI('https://www.bukalapak.com'))).to be_truthy
-        expect(Controller.safe_domain?(URI('https://www.bar.foo.com/path'))).to be_truthy
-        expect(Controller.safe_domain?(URI('https://documents.foo.com/access/jwt'))).to be_truthy
-        expect(Controller.safe_domain?(URI('https://good.foo.com'))).to be_truthy
-        expect(Controller.safe_domain?(URI('https://us.test.com/good-end-point'))).to be_truthy
-        expect(Controller.safe_domain?(URI('https://us.test.com/good-end-point/password=123'))).to be_truthy
-      end
-
-      it "allows domains with or without trailing slash" do
-        expect(Controller.safe_domain?(URI('https://www.bukalapak.com'))).to be_truthy
-        expect(Controller.safe_domain?(URI('https://www.bukalapak.com/'))).to be_truthy
-      end
-      
-      it "allows domains that start with an allowed domain" do
-        expect(Controller.safe_domain?(URI('https://www.bukalapak.com/path'))).to be_truthy
-      end
-
-      it "disallows the domains not in the allowlist" do
-        expect(Controller.safe_domain?(URI('https://www.evil.com'))).to be_falsey
-      end
-
-      it "disallows domains that include url components not in the allowlist, wildcard included" do
-        expect(Controller.safe_domain?(URI("https://test.com/evil-endpoint/password=hahaha"))).to be_falsey
-        expect(Controller.safe_domain?(URI("https://good-website.test.com/evil-endpoint"))).to be_falsey
-      end
-
-      it "disallows domains that include a domain from the allowlist as part of the url", :aggregate_failures do
-        expect(Controller.safe_domain?(URI("https://example.com/bukalapak.com"))).to be_falsey
-        expect(Controller.safe_domain?(URI('https://www.bukalapak.com.evil.com'))).to be_falsey
-      end
-
-      it "disallows an allowed domain if we prepend subdomain bits" do
-        expect(Controller.safe_domain?(URI("https://evil.documents.foo.com/access/jwt?token=123"))).to be_falsey
-      end
-
-      it "disallows an allowed domain if URI scheme is different" do
-        expect(Controller.safe_domain?(URI("http://www.bukalapak.com"))).to be_falsey
-      end
-    end
-    
   end
 end

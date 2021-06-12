@@ -18,15 +18,16 @@ module SafeRedirect
         rf = domain_uri.host.split(/(\*)/).map { |f| f == "*" ? "[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]?" : Regexp.escape(f) }
         regexp = Regexp.new("\\A#{rf.join}\\z")
 
-        safe = !uri.host.match(regexp).nil?
+        host_match = !uri.host.match(regexp).nil?
 
         # if domain starts with *. and contains no other wildcards, include the
         # naked domain too (e.g. foo.org when *.foo.org is the whitelist)
         if domain_uri.host =~ /\A\*\.[^\*]+\z/
           naked_domain_host = domain_uri.host.gsub("*.", "")
-          domain_uri.host = uri.host if safe
+          domain_uri.host = uri.host if host_match
 
-          safe ||= uri_component_match?(uri_component: uri.host, required_component: naked_domain_host) || uri_component_match?(uri_component: uri.host, required_component: domain_uri.host)
+          safe = uri_component_match?(uri_component: uri.host, required_component: naked_domain_host) ||
+                   uri_component_match?(uri_component: uri.host, required_component: domain_uri.host)
         end
       else
         safe = uri_component_match?(uri_component: uri.host, required_component: domain_uri.host)
@@ -49,7 +50,7 @@ module SafeRedirect
     end
   end
 
-  def redirect_to(path, options={})
+  def redirect_to(path, options = {})
     target = options[:safe] ? path : safe_path(path)
 
     log("Unsafe redirect path modified to #{target} from #{path}", :warn) if target != path
