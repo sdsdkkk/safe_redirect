@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'stringio'
 require 'logger'
-require 'pry'
 
 module SafeRedirect
   describe SafeRedirect do
