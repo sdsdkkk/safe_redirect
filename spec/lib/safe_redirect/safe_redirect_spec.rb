@@ -16,6 +16,7 @@ module SafeRedirect
 
     SAFE_PATHS = [
       'https://www.bukalapak.com',
+      'https://www.bukalapak.com/path',
       '/',
       '/foobar',
       'http://www.twitter.com',
@@ -39,6 +40,10 @@ module SafeRedirect
       "https://www.bukalapak.com\n.evil.com",
       "http://blah.blah.foo.org",
       "///bit.ly/1hqE77G",
+      "https://test.com/evil-endpoint/password=hahaha",
+      "https://good-website.test.com/evil-endpoint",
+      "https://www.bad.bukalapak.com",
+      "http://www.bukalapak.com",
     ]
 
     shared_examples_for 'nonlocal hosts' do |klass|

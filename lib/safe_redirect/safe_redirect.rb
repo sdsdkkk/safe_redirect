@@ -7,25 +7,37 @@ module SafeRedirect
     return true if valid_uri?(uri)
     return false if uri.host.nil?
 
+    safe = false
     SafeRedirect.configuration.domain_whitelists.any? do |domain|
+      domain_uri = URI(domain)
+
+      # check scheme match
+      next if !domain_uri.scheme.nil? && uri.scheme != domain_uri.scheme
+
+      # check host match
       if domain.include?("*")
-        rf = domain.split(/(\*)/).map{ |f| f == "*" ? "[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]?" : Regexp.escape(f) }
+        rf = domain_uri.host.split(/(\*)/).map { |f| f == "*" ? "[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]?" : Regexp.escape(f) }
         regexp = Regexp.new("\\A#{rf.join}\\z")
 
-        safe = uri.host.match(regexp)
+        host_match = !uri.host.match(regexp).nil?
 
         # if domain starts with *. and contains no other wildcards, include the
         # naked domain too (e.g. foo.org when *.foo.org is the whitelist)
-        if domain =~ /\A\*\.[^\*]+\z/
-          naked_domain = domain.gsub("*.", "")
-          safe || uri.host == naked_domain
-        else
-          safe
+        if domain_uri.host =~ /\A\*\.[^\*]+\z/
+          naked_domain_host = domain_uri.host.gsub("*.", "")
+          domain_uri.host = uri.host if host_match
+
+          safe = uri_component_match?(uri_component: uri.host, required_component: naked_domain_host) ||
+                   uri_component_match?(uri_component: uri.host, required_component: domain_uri.host)
         end
       else
-        uri.host == domain
+        safe = uri_component_match?(uri_component: uri.host, required_component: domain_uri.host)
       end
+
+      # check path match
+      safe &= uri_component_match?(uri_component: uri.path, required_component: domain_uri.path)
     end
+    safe
   end
 
   def safe_path(path)
@@ -39,7 +51,7 @@ module SafeRedirect
     end
   end
 
-  def redirect_to(path, options={})
+  def redirect_to(path, options = {})
     target = options[:safe] ? path : safe_path(path)
 
     log("Unsafe redirect path modified to #{target} from #{path}", :warn) if target != path
@@ -97,4 +109,14 @@ module SafeRedirect
     end
   end
 
+  def uri_component_match?(uri_component:, required_component:)
+    if !required_component.nil?
+      # extract the parts in this element and ignore trailing "/"
+      # check if all parts in required_component match exactly with the first parts of uri
+      # eg. required_component: /bill matches uri: /bill/token=123 but not /not-bill/token=123
+      required_parts = required_component.split("/")
+      return false if required_parts != uri_component&.split("/")&.first(required_parts.size)
+    end
+    true
+  end
 end
